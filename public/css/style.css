@@ -1,0 +1,78 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), url(../font/ubuntu.woff) format('woff');
+}
+
+div.remember {
+    margin-top: 7px;
+    color: #969696;
+}
+
+div.remember label {
+    padding-top: 15px;
+}
+
+div.forgot {
+    margin-top: 7px;
+    color: #dadada;
+}
+
+footer {
+    background: url("../img/feature-gradient.png") no-repeat scroll center 100% white;
+    color: #01a0e4;
+    font-size: 12px;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer a {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+table.signup td {
+    padding: 10px;
+}
+
+table.signup .alert {
+    margin-bottom: 0;
+    margin-top: 3px;
+}
+
+table.perms select {
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+table.perms label {
+    margin-right: 10px;
+}
+
+div.main-container {
+    min-height: 450px;
+}
+div.motorbike-title {
+    width: 50%;
+    float: left;
+}
+div.motorbike-image {
+    width: 50%;
+    float: right;
+}
+div.motorbike {
+    padding: 20px;
+}
+div.motorbike div.price {
+    margin: 50px auto auto;
+}
+div.motorbike div.price h2 {
+    color: #01a0e4;
+}
+div.motorbike div.price span {
+    color: #01a0e4;
+}
+.navbar-inner {
+    border-radius: 0 !important;
+}
