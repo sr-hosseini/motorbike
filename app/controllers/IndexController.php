@@ -1,6 +1,8 @@
 <?php
 namespace MotorBike\Controllers;
 
+use MotorBike\Models\Motorbikes;
+
 /**
  * Display the default index page.
  */
@@ -12,7 +14,13 @@ class IndexController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->view->setVar('logged_in', is_array($this->auth->getIdentity()));
+        
+        $motorbikes = Motorbikes::find(array(
+            'order' => 'created_at DESC',
+            'limit' => 2
+        ));
+
+        $this->view->motorbikes = $motorbikes;
         $this->view->setTemplateBefore('default');
     }
 }

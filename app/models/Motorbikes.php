@@ -85,7 +85,7 @@ class Motorbikes extends \Phalcon\Mvc\Model
                 array(
                     'beforeValidationOnCreate' => array(
                         'field'  => 'created_at',
-                        'format' => 'Y-m-d'
+                        'format' => 'Y-m-d H:i:s'
                     )
                 )
             )

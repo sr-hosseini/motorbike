@@ -33,7 +33,7 @@ class Auth extends Component
 
         $this->session->set('auth-identity', array(
             'id' => $user->id,
-            'name' => $user->name,
+            'name' => $user->name
         ));
     }
 

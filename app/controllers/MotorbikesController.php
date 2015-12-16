@@ -153,8 +153,9 @@ class MotorbikesController extends ControllerBase
 
         $form->clear();
 
-        $this->flash->success("motorbike was created successfully");
-        return $this->forward("motorbikes/index");
+        $this->flash->success('motorbike was created successfully');
+        
+        return $this->forward('motorbikes/show/' . $motorbike->getId());
     }
 
     /**

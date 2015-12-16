@@ -17,19 +17,14 @@
 
 <div class="row">
 
-    <div class="span4">
-        <div class="well">
-            <h3>Awesome Section</h3>
-            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.</p>
+    {% for motorbike in motorbikes %}
+        <div class="span4">
+            <div class="well">
+                <h3>{{ motorbike.brand }}</h3>
+                {{ image(motorbike.imageUri, "alt": motorbike.brand ~ ' ' ~ motorbike.model, "width":"200px") }}
+            </div>
         </div>
-    </div>
-
-    <div class="span4">
-        <h3>Important Stuff</h3>
-        <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.</p>
-    </div>
+    {% endfor %}
 
     <div class="span4">
         <h3>Name</h3>

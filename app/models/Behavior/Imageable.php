@@ -99,34 +99,32 @@ class Imageable extends Behavior implements BehaviorInterface
 
     protected function processUpload(ModelInterface $model)
     {
-        echo 'here';
         /* @var $request \Phalcon\Http\Request */
         $request = $model->getDI()->getRequest();
         if ($request->hasFiles(true)) {
-            echo 'file has';
             foreach ($request->getUploadedFiles() as $file) {
-                /**
-                 *  NOTE!!!
-                 * Nothing was validated here! Any validations must be are made in a appropriate validator
-                 */
+                
                 if ($file->getKey() != $this->imageField || !in_array($file->getType(), $this->allowedFormats)) {
                     continue;
                 }
+                
                 $uniqueFileName = time() . '-' . uniqid() . '.' . strtolower($file->getExtension());
-echo 'try to move';
-                mkdir($this->uploadPath, 0755, true);
 
-                if ($file->moveTo(rtrim($this->uploadPath, '/\\') . DIRECTORY_SEPARATOR . $uniqueFileName)) {
-                    echo '...moved';
-                    $model->writeAttribute($this->imageField, $uniqueFileName);
+                if (!file_exists($this->uploadPath))
+                    mkdir($this->uploadPath, 0755, true);
 
-                    // Delete old file
-                    $this->processDelete();
+                $file_name = rtrim($this->uploadPath, '/\\') . DIRECTORY_SEPARATOR . $uniqueFileName;
+                if (!$file->moveTo($file_name)) {
+                    if (!(file_exists($file->getTempName()) && copy($file->getTempName(), $file_name))) {
+                        return $this;
+                    }
                 }
+
+                $model->writeAttribute($this->imageField, $uniqueFileName);
+                // Delete old file
+                $this->processDelete();
             }
         }
-
-        return $this;
     }
 
     // Symfony\Component\Filesystem\Filesystem uses here, you can do it otherwise

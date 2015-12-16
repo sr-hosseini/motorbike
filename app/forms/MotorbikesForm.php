@@ -58,12 +58,6 @@ class MotorbikesForm extends Form
             'placeholder' => 'CC'
         ));
         
-        $cc->addValidators(array(
-            new PresenceOf(array(
-                'message' => 'The cc is required khala khla'
-            ))
-        ));
-
         $this->add($cc);
         
         $color = new Text('color', array(
@@ -71,9 +65,6 @@ class MotorbikesForm extends Form
         ));
         
         $color->addValidators(array(
-            new PresenceOf(array(
-                'message' => 'The color is required'
-            )),
             new StringLength(array(
                 'max' => 50,
                 'messageMaximum' => 'Color is too long. Miximum 50 characters'
@@ -86,12 +77,6 @@ class MotorbikesForm extends Form
             'placeholder' => 'Weight'
         ));
         
-        $weight->addValidators(array(
-            new PresenceOf(array(
-                'message' => 'The weight is required'
-            ))
-        ));
-
         $this->add($weight);
         
         $price = new Text('price', array(
