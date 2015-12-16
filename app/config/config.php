@@ -23,5 +23,8 @@ return new \Phalcon\Config(array(
     ),
     'media' => array(
         'uploadDir' => 'uploads_media'
+    ),
+    'setting' => array(
+        'itemsPerPage' => 5
     )
 ));

@@ -55,7 +55,7 @@ class MotorbikesController extends ControllerBase
 
         $paginator = new Paginator(array(
             "data" => $motorbike,
-            "limit"=> 5,
+            "limit"=> $this->getDI()->get('config')->setting->itemsPerPage,
             "page" => $numberPage
         ));
 

@@ -108,7 +108,6 @@ class TestMotorbikesController extends UnitTestCase {
         $application = new Application($this->di);
         $files = $request->getUploadedFiles();
         $result = $application->handle()->getContent();
-        file_put_contents('/home/sr_hosseini/www/shiir.html', $result);
         $this->assertNotFalse(strpos($result, 'motorbike was created successfully'), 'Error in creating motorbike');
     }
 
