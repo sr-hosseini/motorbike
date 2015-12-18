@@ -84,20 +84,24 @@ class MotorbikesController extends ControllerBase
             $parameters = array();
         }
 
-        /**
-         * @todo only fetch motors of this page
-         */
+//        $count = Motorbikes::count($parameters);
+        $itemsPerPage = $this->getDI()->get('config')->setting->itemsPerPage;
+//        $parameters['offset'] = $itemsPerPage * $numberPage;
+//        $parameters['limit'] = $itemsPerPage;
 
-        $motorbike = Motorbikes::find($parameters);
-        if (count($motorbike) == 0) {
-            $this->flash->notice('The search did not find any motorbike');
-
-            return $this->forward('motorbikes/index');
-        }
+//        $motorbike = Motorbikes::find($parameters);
+//        if (count($motorbike) == 0) {
+//            $this->flash->notice('The search did not find any motorbike');
+//
+//            return $this->forward('motorbikes/index');
+//        }
+        
+//        var_dump($motorbike);
 
         $paginator = new Paginator(array(
-            'data' => $motorbike,
-            'limit' => $this->getDI()->get('config')->setting->itemsPerPage,
+//            'data' => $motorbike,
+            'builder' => $parameters,
+            'limit' => $itemsPerPage,
             'page' => $numberPage
         ));
 
