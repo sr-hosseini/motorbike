@@ -61,6 +61,14 @@ div.motorbike-image {
     width: 50%;
     float: right;
 }
+div.motorbike-search {
+    float: left;
+    margin-right: 20px;
+}
+div.motorbike-results {
+    margin-left: 20px;
+    float: left;
+}
 div.motorbike {
     padding: 20px;
 }

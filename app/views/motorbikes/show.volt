@@ -2,10 +2,7 @@
 
 <ul class="pager">
     <li class="previous pull-left">
-        {{ link_to("motorbikes/index", "&larr; Go Back") }}
-    </li>
-    <li class="pull-right">
-        {{ link_to("motorbikes/new", "Create motorbike", "class": "btn btn-primary") }}
+        {{ link_to("motorbikes/search", "&larr; Go Back") }}
     </li>
 </ul>
 

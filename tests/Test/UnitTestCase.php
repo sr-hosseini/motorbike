@@ -23,39 +23,39 @@ abstract class UnitTestCase extends PhalconTestCase
         $this->di = $this->getDI();
         $config = $this->di->get('config');
         
-        // Load any additional services that mock some methods to prevent database unwanted changes
-        $this->di->set('modelsManager', new Manager());
-        $this->di->set('modelsMetadata', new Files(array('metaDataDir' => $config->application->testsMetadataDir)));
-        $con = $this->getMock('\\Phalcon\\Db\\Adapter\\Pdo\\Mysql', array('getDialect', 'query', 'execute'), array(),'',false);
-        $this->dialect = $this->getMock('\\Phalcon\\Db\\Dialect\\Mysql', array('select'), array(), '', false);
-        $results = $this->getMock('\\Phalcon\\Db\\Result\\Pdo', array('numRows', 'setFetchMode', 'fetchall', 'create'), array(), '', false);
-        $results->expects($this->any())
-            ->method('numRows')
-            ->will($this->returnValue(10));
-
-        $results->expects($this->any())
-            ->method('create')
-            ->willReturn(true);
-
-        $results->expects($this->any())
-            ->method('fetchall')
-            ->will($this->returnValue(0));
-
-        $this->dialect->expects($this->any())
-            ->method('select');
-
-        $con->expects($this->any())
-            ->method('getDialect')
-            ->will($this->returnValue($this->dialect));
-
-        $con->expects($this->any())
-            ->method('query')
-            ->will($this->returnValue($results));
-
-        $con->expects($this->any())
-            ->method('execute');
-
-        $this->di->set('db', $con);
+//        // Load any additional services that mock some methods to prevent database unwanted changes
+//        $this->di->set('modelsManager', new Manager());
+//        $this->di->set('modelsMetadata', new Files(array('metaDataDir' => $config->application->testsMetadataDir)));
+//        $con = $this->getMock('\\Phalcon\\Db\\Adapter\\Pdo\\Mysql', array('getDialect', 'query', 'execute'), array(),'',false);
+//        $this->dialect = $this->getMock('\\Phalcon\\Db\\Dialect\\Mysql', array('select'), array(), '', false);
+//        $results = $this->getMock('\\Phalcon\\Db\\Result\\Pdo', array('numRows', 'setFetchMode', 'fetchall', 'create'), array(), '', false);
+//        $results->expects($this->any())
+//            ->method('numRows')
+//            ->will($this->returnValue(10));
+//
+//        $results->expects($this->any())
+//            ->method('create')
+//            ->willReturn(true);
+//
+//        $results->expects($this->any())
+//            ->method('fetchall')
+//            ->will($this->returnValue(0));
+//
+//        $this->dialect->expects($this->any())
+//            ->method('select');
+//
+//        $con->expects($this->any())
+//            ->method('getDialect')
+//            ->will($this->returnValue($this->dialect));
+//
+//        $con->expects($this->any())
+//            ->method('query')
+//            ->will($this->returnValue($results));
+//
+//        $con->expects($this->any())
+//            ->method('execute');
+//
+//        $this->di->set('db', $con);
 
 //        parent::setUp($this->di);
 

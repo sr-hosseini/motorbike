@@ -1,9 +1,5 @@
 {{ content() }}
 
-<div align="right">
-    {{ link_to("motorbikes/new", "<i class='icon-plus-sign'></i> Create Motorbike", "class": "btn btn-primary") }}
-</div>
-
 {{ form("motorbikes/search", "method":"post", "autocomplete" : "off") }}
 
     <h2>Search motorbikes</h2>

@@ -6,7 +6,11 @@ use Phalcon\Paginator\Adapter\Model as Paginator;
 
 use MotorBike\Models\Motorbikes;
 use MotorBike\Forms\MotorbikesForm;
+use MotorBike\Forms\MotorbikesSortForm;
 
+/**
+ * Motorbikes controller
+ */
 class MotorbikesController extends ControllerBase
 {
 
@@ -23,43 +27,85 @@ class MotorbikesController extends ControllerBase
         $this->persistent->parameters = null;
     }
 
+    public function sortAction()
+    {
+        if (!$this->request->isPost()) {
+            return $this->forward("motorbikes/search");
+        }
+
+        $form = new MotorbikesSortForm;
+
+        $data = $this->request->getPost();
+        $sort = new \MotorBike\SortHelper();
+        
+        if (!$form->isValid($data, $sort)) {
+            foreach ($form->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+            return $this->forward('motorbikes/search');
+        } else {
+
+            if ($this->persistent->parameters) {
+                $parameters = $this->persistent->parameters;
+            } else {
+                $parameters = array();
+            }
+            
+            $parameters['order'] = $sort->toString();
+            $this->persistent->parameters = $parameters;
+        }
+        
+        return $this->listAction();        
+    }
+    
     /**
-     * Searches for motorbike
+     * Searches for motorbikes
      */
     public function searchAction()
     {
 
-        $numberPage = 1;
         if ($this->request->isPost()) {
-            $query = Criteria::fromInput($this->di, "MotorBike\Models\Motorbikes", $_POST);
+            $query = Criteria::fromInput($this->di, "MotorBike\Models\Motorbikes", $this->request->getPost());
             $this->persistent->parameters = $query->getParams();
-        } else {
-            $numberPage = $this->request->getQuery("page", "int");
         }
-
+        
+        return $this->listAction();
+    }
+    
+    private function listAction()
+    {
+        $numberPage = 1;
+        if (!$this->request->isPost()) {
+            $numberPage = $this->request->getQuery('page', 'int');
+        }
+        
         $parameters = $this->persistent->parameters;
         if (!is_array($parameters)) {
             $parameters = array();
         }
-        $parameters["order"] = "id";
+
+        /**
+         * @todo only fetch motors of this page
+         */
 
         $motorbike = Motorbikes::find($parameters);
         if (count($motorbike) == 0) {
-            $this->flash->notice("The search did not find any motorbike");
+            $this->flash->notice('The search did not find any motorbike');
 
-            return $this->dispatcher->forward(array(
-                "controller" => "motorbikes",
-                "action" => "index"
-            ));
+            return $this->forward('motorbikes/index');
         }
 
         $paginator = new Paginator(array(
-            "data" => $motorbike,
-            "limit"=> $this->getDI()->get('config')->setting->itemsPerPage,
-            "page" => $numberPage
+            'data' => $motorbike,
+            'limit' => $this->getDI()->get('config')->setting->itemsPerPage,
+            'page' => $numberPage
         ));
 
+        // Pick "motorbike/search" as view to render
+        $this->view->pick("motorbikes/search");
+
         $this->view->page = $paginator->getPaginate();
+        $this->view->sortForm = new MotorbikesSortForm();
     }
 
     /**
@@ -84,10 +130,7 @@ class MotorbikesController extends ControllerBase
             if (!$motorbike) {
                 $this->flash->error("motorbike was not found");
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "motorbikes",
-                    "action" => "index"
-                ));
+                return $this->forward('motorbikesindex');
             }
 
             $this->view->id = $motorbike->id;
@@ -100,7 +143,7 @@ class MotorbikesController extends ControllerBase
             $this->tag->setDefault("weight", $motorbike->getWeight());
             $this->tag->setDefault("price", $motorbike->getPrice());
             $this->tag->setDefault("image", $motorbike->getImage());
-            
+
         }
     }
 
@@ -115,7 +158,7 @@ class MotorbikesController extends ControllerBase
         if (!$motorbike) {
             $this->flash->error("motorbike was not found");
 
-            return $this->dispatcher->forward(array(
+            return $this->forward(array(
                 "controller" => "motorbikes",
                 "action" => "index"
             ));
@@ -154,7 +197,7 @@ class MotorbikesController extends ControllerBase
         $form->clear();
 
         $this->flash->success('motorbike was created successfully');
-        
+
         return $this->forward('motorbikes/show/' . $motorbike->getId());
     }
 
@@ -166,10 +209,7 @@ class MotorbikesController extends ControllerBase
     {
 
         if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "motorbikes",
-                "action" => "index"
-            ));
+            return $this->forward('motorbikes/index');
         }
 
         $id = $this->request->getPost("id");
@@ -178,10 +218,7 @@ class MotorbikesController extends ControllerBase
         if (!$motorbike) {
             $this->flash->error("motorbike does not exist " . $id);
 
-            return $this->dispatcher->forward(array(
-                "controller" => "motorbikes",
-                "action" => "index"
-            ));
+            return $this->forward('motorbikes/index');
         }
 
         $motorbike->setBrand($this->request->getPost("brand"));
@@ -191,7 +228,7 @@ class MotorbikesController extends ControllerBase
         $motorbike->setWeight($this->request->getPost("weight"));
         $motorbike->setPrice($this->request->getPost("price"));
         $motorbike->setImage($this->request->getPost("image"));
-        
+
 
         if (!$motorbike->save()) {
 
@@ -199,7 +236,7 @@ class MotorbikesController extends ControllerBase
                 $this->flash->error($message);
             }
 
-            return $this->dispatcher->forward(array(
+            return $this->forward(array(
                 "controller" => "motorbikes",
                 "action" => "edit",
                 "params" => array($motorbike->id)
@@ -208,7 +245,7 @@ class MotorbikesController extends ControllerBase
 
         $this->flash->success("motorbike was updated successfully");
 
-        return $this->dispatcher->forward(array(
+        return $this->forward(array(
             "controller" => "motorbikes",
             "action" => "index"
         ));
@@ -227,7 +264,7 @@ class MotorbikesController extends ControllerBase
         if (!$motorbike) {
             $this->flash->error("motorbike was not found");
 
-            return $this->dispatcher->forward(array(
+            return $this->forward(array(
                 "controller" => "motorbikes",
                 "action" => "index"
             ));
@@ -239,7 +276,7 @@ class MotorbikesController extends ControllerBase
                 $this->flash->error($message);
             }
 
-            return $this->dispatcher->forward(array(
+            return $this->forward(array(
                 "controller" => "motorbikes",
                 "action" => "search"
             ));
@@ -247,7 +284,7 @@ class MotorbikesController extends ControllerBase
 
         $this->flash->success("motorbike was deleted successfully");
 
-        return $this->dispatcher->forward(array(
+        return $this->forward(array(
             "controller" => "motorbikes",
             "action" => "index"
         ));

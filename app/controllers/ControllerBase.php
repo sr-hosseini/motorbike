@@ -7,6 +7,8 @@ use Phalcon\Mvc\Dispatcher;
 /**
  * ControllerBase
  * This is the base controller for all controllers in the application
+ * 
+ * @property \Phalcon\Http\Client\Request $request
  */
 class ControllerBase extends Controller {
 
